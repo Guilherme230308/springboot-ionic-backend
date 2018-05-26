@@ -11,7 +11,6 @@ import com.udemy.cursomc.domain.ItemPedido;
 import com.udemy.cursomc.domain.PagamentoComBoleto;
 import com.udemy.cursomc.domain.Pedido;
 import com.udemy.cursomc.domain.enums.EstadoPagamento;
-import com.udemy.cursomc.repository.ClienteRepository;
 import com.udemy.cursomc.repository.ItemPedidoRepository;
 import com.udemy.cursomc.repository.PagamentoRepository;
 import com.udemy.cursomc.repository.PedidoRepository;
@@ -37,6 +36,9 @@ public class PedidoService {
 
 	@Autowired
 	private ClienteService clienteService;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	public Pedido find(Integer id) {
 		Optional<Pedido> obj = repo.findById(id);
@@ -64,7 +66,7 @@ public class PedidoService {
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.saveAll(obj.getItens());
-		System.out.println(obj);
+		emailService.sendOderConfirmationEmail(obj);
 		return obj;
 	}
 }
