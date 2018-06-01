@@ -14,37 +14,40 @@ public class ClienteNewDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@NotEmpty(message="O campo Nome é obrigatório")
-	@Length(min = 5, max = 120, message="O tamanho deve ser entre 5 e 120 caracteres")
+	@NotEmpty(message = "O campo Nome é obrigatório")
+	@Length(min = 5, max = 120, message = "O tamanho deve ser entre 5 e 120 caracteres")
 	private String nome;
-	
-	@NotEmpty(message="O campo Email é obrigatório")
-	@Email(message="Email inválido")
+
+	@NotEmpty(message = "O campo Email é obrigatório")
+	@Email(message = "Email inválido")
 	private String email;
-	
-	@NotEmpty(message="O CPF ou CNPJ do cliente é obrigatório")
+
+	@NotEmpty(message = "O CPF ou CNPJ do cliente é obrigatório")
 	private String cpfOuCnpj;
-	
+
 	private Integer tipo;
 
-	@NotEmpty(message="O logradouro é obrigatório")
+	@NotEmpty(message = "O campo Senha é obrigatório")
+	private String senha;
+
+	@NotEmpty(message = "O logradouro é obrigatório")
 	private String logradouro;
 
-	@NotEmpty(message="O número é obrigatório")
+	@NotEmpty(message = "O número é obrigatório")
 	private String numero;
-	
+
 	private String complemento;
-	
+
 	private String bairro;
-	
-	@NotEmpty(message="O CEP é obrigatório")
+
+	@NotEmpty(message = "O CEP é obrigatório")
 	private String cep;
 
-	@NotEmpty(message="Inserir ao menos um telefone")
+	@NotEmpty(message = "Inserir ao menos um telefone")
 	private String telefone1;
-	
+
 	private String telefone2;
-	
+
 	private String telefone3;
 
 	private Integer cidadeId;
@@ -82,6 +85,14 @@ public class ClienteNewDTO implements Serializable {
 
 	public void setTipo(Integer tipo) {
 		this.tipo = tipo;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	public String getLogradouro() {
