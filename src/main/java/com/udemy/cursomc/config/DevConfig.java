@@ -17,7 +17,7 @@ import com.udemy.cursomc.services.SmtpEmailService;
 public class DevConfig {
 
 	@Value("${spring.jpa.hibernate.ddl-auto}")
-	private String Strategy;
+	private String strategy;
 
 	@Autowired
 	private DBService dbService;
@@ -25,7 +25,7 @@ public class DevConfig {
 	@Bean
 	public boolean instatiateDataBase() throws ParseException {
 
-		if (!"create".equals(Strategy)) {
+		if (!"create".equals(strategy)) {
 			return false;
 		}
 
