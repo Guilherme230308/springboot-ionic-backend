@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.udemy.cursomc.security.JWTAuthenticationFilter;
+import com.udemy.cursomc.security.JWTAuthorizationFilter;
 import com.udemy.cursomc.security.JWTUtil;
 
 @Configuration
@@ -26,23 +27,17 @@ import com.udemy.cursomc.security.JWTUtil;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private Environment env;
-	
-	@Autowired
-	private JWTUtil jwtUtil;
-	
-	@Autowired
 	private UserDetailsService userDetailsService;
 
-	private static final String[] PUBLIC_MATCHERS = { 
-			"/h2-console/**" 
-	};
+	@Autowired
+	private Environment env;
 
-	private static final String[] PUBLIC_MATCHERS_GET = { 
-			"/produtos/**", 
-			"/categorias/**",
-			"/clientes/**" 
-	};
+	@Autowired
+	private JWTUtil jwtUtil;
+
+	private static final String[] PUBLIC_MATCHERS = { "/h2-console/**" };
+
+	private static final String[] PUBLIC_MATCHERS_GET = { "/produtos/**", "/categorias/**", "/clientes/**" };
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -52,16 +47,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		}
 
 		http.cors().and().csrf().disable();
-		http.authorizeRequests()
-				.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
-				.antMatchers(PUBLIC_MATCHERS).permitAll()
-				.anyRequest().authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
+				.antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
-	
-	public void configure(AuthenticationManagerBuilder auto) throws Exception{
-		auto.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+
+	@Override
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
 
 	@Bean
@@ -75,5 +70,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
 }
